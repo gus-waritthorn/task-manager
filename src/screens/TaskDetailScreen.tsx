@@ -1,8 +1,14 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
-import {Picker} from '@react-native-picker/picker';
 import {RootStackParamList} from '../../App';
 
 type TaskDetailScreenNavigationProp = StackNavigationProp<
@@ -28,7 +34,7 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
   const handleSave = () => {
     const updatedTask = {...task, title, description, status};
     updateTask(updatedTask);
-    navigation.goBack(); // Navigate back to the task list
+    navigation.goBack();
   };
 
   return (
@@ -44,14 +50,16 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
       />
 
       <Text>Status:</Text>
-      <Picker
-        selectedValue={status}
-        onValueChange={itemValue => setStatus(itemValue)}
-        style={styles.picker}>
-        <Picker.Item label="To Do" value="To Do" />
-        <Picker.Item label="In Progress" value="In Progress" />
-        <Picker.Item label="Completed" value="Completed" />
-      </Picker>
+      <TouchableOpacity
+        style={styles.input}
+        onPress={() =>
+          navigation.navigate('Status', {
+            status,
+            updateStatus: (value: string) => setStatus(value),
+          })
+        }>
+        <Text>{status}</Text>
+      </TouchableOpacity>
 
       <Button title="Save Task" onPress={handleSave} />
     </View>

@@ -1,13 +1,14 @@
-import React from 'react';
-import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {useCallback} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Button,
+} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: string;
-}
+import {DEFAULT_TASKS, EMPTY_TASK, Task} from '../utils/task';
 
 type RootStackParamList = {
   TaskList: undefined;
@@ -24,17 +25,33 @@ interface TaskListScreenProps {
 }
 
 const TaskListScreen: React.FC<TaskListScreenProps> = ({navigation}) => {
-  const [tasks, setTasks] = React.useState<Task[]>([
-    {id: 1, title: 'Task 1', description: 'Description 1', status: 'Pending'},
-    {id: 2, title: 'Task 2', description: 'Description 2', status: 'Completed'},
-    {id: 3, title: 'Task 3', description: 'Description 3', status: 'To Do'},
-  ]);
+  const [tasks, setTasks] = React.useState<Task[]>(DEFAULT_TASKS);
 
-  const updateTask = (updatedTask: Task) => {
-    setTasks(
-      tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)),
-    );
-  };
+  const updateTask = useCallback(
+    (updatedTask: Task) => {
+      setTasks(
+        tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)),
+      );
+    },
+    [tasks],
+  );
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => (
+        <Button
+          onPress={() =>
+            navigation.navigate('TaskDetail', {
+              task: EMPTY_TASK,
+              updateTask,
+            })
+          }
+          title="Create"
+        />
+      ),
+    });
+  }, [navigation, updateTask]);
 
   const renderTask = ({item}: {item: Task}) => (
     <TouchableOpacity
@@ -54,7 +71,7 @@ const TaskListScreen: React.FC<TaskListScreenProps> = ({navigation}) => {
       <FlatList
         data={tasks}
         renderItem={renderTask}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(_, index) => index.toString()}
       />
     </View>
   );
