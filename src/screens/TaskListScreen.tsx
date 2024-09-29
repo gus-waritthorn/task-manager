@@ -8,7 +8,7 @@ import {
   Button,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {DEFAULT_TASKS, EMPTY_TASK, Task} from '../utils/task';
+import {DEFAULT_TASKS, EMPTY_TASK, generateUUID, Task} from '../utils/task';
 
 type RootStackParamList = {
   TaskList: undefined;
@@ -27,14 +27,17 @@ interface TaskListScreenProps {
 const TaskListScreen: React.FC<TaskListScreenProps> = ({navigation}) => {
   const [tasks, setTasks] = React.useState<Task[]>(DEFAULT_TASKS);
 
-  const updateTask = useCallback(
-    (updatedTask: Task) => {
-      setTasks(
-        tasks.map(task => (task.id === updatedTask.id ? updatedTask : task)),
-      );
-    },
-    [tasks],
-  );
+  const updateTask = useCallback((updatedTask: Task) => {
+    setTasks(prevTasks => {
+      if (updatedTask.id) {
+        return prevTasks.map(task =>
+          task.id === updatedTask.id ? updatedTask : task,
+        );
+      }
+      // add new task to the list
+      return [...prevTasks, {...updatedTask, id: generateUUID()}];
+    });
+  }, []);
 
   React.useEffect(() => {
     navigation.setOptions({
