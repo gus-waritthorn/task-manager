@@ -1,15 +1,16 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {useForm, Control} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {View, Text, Button, StyleSheet} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../App';
+import {schema} from '../constants/schemas';
+import {EMPTY_TASK, Task} from '../utils/task';
+import StatusModal from '../components/StatusModal';
+import TextInputForm from '../components/form/TextInputForm';
+import {ObjectSchema} from 'yup';
+import TouchableOpacityForm from '../components/form/TouchableOpacityForm';
 
 type TaskDetailScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -26,42 +27,51 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
   route,
   navigation,
 }) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
   const {task, updateTask} = route.params;
-  const [title, setTitle] = useState(task.title);
-  const [description, setDescription] = useState(task.description);
-  const [status, setStatus] = useState(task.status);
 
-  const handleSave = () => {
-    const updatedTask = {...task, title, description, status};
-    updateTask(updatedTask);
+  useEffect(() => {
+    task.id ? reset(task) : reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [task]);
+
+  const {control, handleSubmit, reset} = useForm<Task>({
+    resolver: yupResolver(schema as ObjectSchema<Task>),
+    defaultValues: EMPTY_TASK,
+    mode: 'onSubmit',
+    reValidateMode: 'onBlur',
+  });
+
+  const handleSave = (formValue: Task) => {
+    updateTask(formValue);
     navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      <Text>Title:</Text>
-      <TextInput value={title} onChangeText={setTitle} style={styles.input} />
+      <Text>Title</Text>
+      <TextInputForm name="title" control={control} />
 
-      <Text>Description:</Text>
-      <TextInput
-        value={description}
-        onChangeText={setDescription}
-        style={styles.input}
-      />
+      <Text>Description</Text>
+      <TextInputForm name="description" control={control} />
 
       <Text>Status:</Text>
-      <TouchableOpacity
-        style={styles.input}
-        onPress={() =>
-          navigation.navigate('Status', {
-            status,
-            updateStatus: (value: string) => setStatus(value),
-          })
-        }>
-        <Text>{status}</Text>
-      </TouchableOpacity>
+      <TouchableOpacityForm
+        name="status"
+        control={control}
+        onPress={() => setShowModal(true)}
+      />
 
-      <Button title="Save Task" onPress={handleSave} />
+      <StatusModal
+        control={control as Control<Task>}
+        visible={showModal}
+        setVisible={setShowModal}
+      />
+
+      <Button
+        title="Save Task"
+        onPress={handleSubmit(data => handleSave(data as Task))}
+      />
     </View>
   );
 };
@@ -73,6 +83,13 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     padding: 10,
+    marginBottom: 10,
+  },
+  errorInput: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
     marginBottom: 10,
   },
   picker: {

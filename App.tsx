@@ -6,14 +6,17 @@ import {createStackNavigator} from '@react-navigation/stack';
 // screen import
 import TaskListScreen from './src/screens/TaskListScreen';
 import TaskDetailScreen from './src/screens/TaskDetailScreen';
-import StatusModal from './src/components/StatusModal';
 
-import {Task} from './src/utils/task';
+import {Task, TaskStatus} from './src/utils/task';
+import {Control} from 'react-hook-form';
 
 export type RootStackParamList = {
   TaskList: undefined;
   TaskDetail: {task: Task; updateTask: (task: Task) => void};
-  Status: {status: string; updateStatus: (status: string) => void};
+  Status: {
+    control: Control<Task>;
+    setValue: (status: TaskStatus) => void;
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -24,11 +27,6 @@ const App = () => {
       <Stack.Navigator initialRouteName="TaskList">
         <Stack.Screen name="TaskList" component={TaskListScreen} />
         <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
-        <Stack.Screen
-          name="Status"
-          component={StatusModal}
-          options={{presentation: 'modal'}}
-        />
       </Stack.Navigator>
     </NavigationContainer>
   );

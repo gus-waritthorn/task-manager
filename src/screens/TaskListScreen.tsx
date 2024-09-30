@@ -70,7 +70,7 @@ const TaskListScreen: React.FC<TaskListScreenProps> = ({navigation}) => {
   );
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
         data={tasks}
         renderItem={renderTask}
@@ -81,6 +81,9 @@ const TaskListScreen: React.FC<TaskListScreenProps> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   taskContainer: {
     padding: 20,
     borderBottomWidth: 1,
