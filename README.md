@@ -56,3 +56,4 @@ yarn test
 
 - this project is focusing on a functionality first
 - delete a task by swiping a list to the left and click delete button
+- task list will persistant between application instance

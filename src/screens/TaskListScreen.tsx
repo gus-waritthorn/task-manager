@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Button,
   TouchableHighlight,
   ListRenderItemInfo,
 } from 'react-native';
@@ -34,15 +33,16 @@ const TaskListScreen: React.FC<TaskListScreenProps> = ({navigation}) => {
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => (
-        <Button
+        <TouchableOpacity
+          style={styles.headerButton}
           onPress={() =>
             navigation.navigate('TaskDetail', {
               task: EMPTY_TASK,
               updateTask,
             })
-          }
-          title="Create"
-        />
+          }>
+          <Text style={styles.headerButtonText}>Create</Text>
+        </TouchableOpacity>
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,6 +102,18 @@ const styles = StyleSheet.create({
   },
   taskTitle: {
     fontSize: 18,
+  },
+  headerButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#2196F3',
+  },
+  headerButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   // style for the hidden component
   hiddenContainer: {
