@@ -1,3 +1,4 @@
+import {ObjectSchema} from 'yup';
 import React, {useEffect, useState} from 'react';
 import {useForm, Control} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -9,7 +10,6 @@ import {schema} from '../constants/schemas';
 import {EMPTY_TASK, Task} from '../utils/task';
 import StatusModal from '../components/StatusModal';
 import TextInputForm from '../components/form/TextInputForm';
-import {ObjectSchema} from 'yup';
 import TouchableOpacityForm from '../components/form/TouchableOpacityForm';
 
 type TaskDetailScreenNavigationProp = StackNavigationProp<

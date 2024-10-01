@@ -4,7 +4,7 @@ export const schema = yup
   .object({
     id: yup.string().optional(),
     title: yup.string().required('Title is required'),
-    description: yup.string().required('Description is required'),
+    description: yup.string(),
     status: yup
       .string()
       .oneOf(['To Do', 'In Progress', 'Done'], 'Invalid status')

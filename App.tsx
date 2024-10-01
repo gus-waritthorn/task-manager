@@ -1,5 +1,6 @@
 import './gesture-handler';
 import React from 'react';
+import {Control} from 'react-hook-form';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -8,7 +9,7 @@ import TaskListScreen from './src/screens/TaskListScreen';
 import TaskDetailScreen from './src/screens/TaskDetailScreen';
 
 import {Task, TaskStatus} from './src/utils/task';
-import {Control} from 'react-hook-form';
+import {TaskContextProvider} from './src/contexts/TaskContext';
 
 export type RootStackParamList = {
   TaskList: undefined;
@@ -23,12 +24,14 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="TaskList">
-        <Stack.Screen name="TaskList" component={TaskListScreen} />
-        <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <TaskContextProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="TaskList">
+          <Stack.Screen name="TaskList" component={TaskListScreen} />
+          <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </TaskContextProvider>
   );
 };
 

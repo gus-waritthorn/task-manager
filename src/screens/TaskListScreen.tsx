@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {DEFAULT_TASKS, EMPTY_TASK, generateUUID, Task} from '../utils/task';
+import {EMPTY_TASK, Task} from '../utils/task';
+import {useTaskContext} from '../contexts/TaskContext';
 
 type RootStackParamList = {
   TaskList: undefined;
@@ -27,23 +28,7 @@ interface TaskListScreenProps {
 }
 
 const TaskListScreen: React.FC<TaskListScreenProps> = ({navigation}) => {
-  const [tasks, setTasks] = React.useState<Task[]>(DEFAULT_TASKS);
-
-  const updateTask = (updatedTask: Task) => {
-    setTasks(prevTasks => {
-      if (updatedTask.id) {
-        return prevTasks.map(task =>
-          task.id === updatedTask.id ? updatedTask : task,
-        );
-      }
-      // add new task to the list
-      return [...prevTasks, {...updatedTask, id: generateUUID()}];
-    });
-  };
-
-  const deleteTask = (index: number) => {
-    setTasks(prevTasks => prevTasks.filter((_, i) => i !== index));
-  };
+  const {tasks, updateTask, deleteTask} = useTaskContext();
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -60,6 +45,7 @@ const TaskListScreen: React.FC<TaskListScreenProps> = ({navigation}) => {
         />
       ),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
   const renderHiddenItem = (data: ListRenderItemInfo<Task>, _: any) => {
