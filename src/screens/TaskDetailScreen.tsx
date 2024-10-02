@@ -50,13 +50,18 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
   return (
     <View style={styles.container}>
       <Text>Title</Text>
-      <TextInputForm name="title" control={control} />
+      <TextInputForm testID="title-input" name="title" control={control} />
 
       <Text>Description</Text>
-      <TextInputForm name="description" control={control} />
+      <TextInputForm
+        testID="description-input"
+        name="description"
+        control={control}
+      />
 
       <Text>Status:</Text>
       <TouchableOpacityForm
+        testID="status-button"
         name="status"
         control={control}
         onPress={() => setShowModal(true)}
@@ -69,6 +74,7 @@ const TaskDetailScreen: React.FC<TaskDetailScreenProps> = ({
       />
 
       <Button
+        testID="save-task-button"
         title="Save Task"
         onPress={handleSubmit(data => handleSave(data as Task))}
       />

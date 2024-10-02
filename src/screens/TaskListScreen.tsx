@@ -11,11 +11,7 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {EMPTY_TASK, Task} from '../utils/task';
 import {useTaskContext} from '../contexts/TaskContext';
-
-type RootStackParamList = {
-  TaskList: undefined;
-  TaskDetail: {task: Task; updateTask: (updatedTask: Task) => void};
-};
+import {RootStackParamList} from '../../App';
 
 type TaskListScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
