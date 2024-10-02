@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal, View, Button, StyleSheet} from 'react-native';
 import {Control, Controller} from 'react-hook-form';
 import {Picker} from '@react-native-picker/picker';
-import {Task} from '../utils/task';
+import {Task, TaskStatus} from '../utils/task';
 
 const StatusModal = ({
   control,
@@ -29,13 +29,17 @@ const StatusModal = ({
           name="status"
           render={({field: {onChange, onBlur, value}}) => (
             <Picker
+              testID="picker-status"
               selectedValue={value}
               onBlur={onBlur}
               onValueChange={onChange}
               style={styles.picker}>
-              <Picker.Item label="To Do" value="To Do" />
-              <Picker.Item label="In Progress" value="In Progress" />
-              <Picker.Item label="Done" value="Done" />
+              <Picker.Item label={TaskStatus.ToDo} value={TaskStatus.ToDo} />
+              <Picker.Item
+                label={TaskStatus.InProgress}
+                value={TaskStatus.InProgress}
+              />
+              <Picker.Item label={TaskStatus.Done} value={TaskStatus.Done} />
             </Picker>
           )}
         />

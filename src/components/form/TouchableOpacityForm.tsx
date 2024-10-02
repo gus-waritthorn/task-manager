@@ -4,10 +4,12 @@ import {Controller, Control} from 'react-hook-form';
 import {Task} from '../../utils/task';
 
 const TouchableOpacityForm = ({
+  testID,
   name,
   control,
   onPress,
 }: {
+  testID: string;
   name: 'status';
   control: Control<Task>;
   onPress: () => void;
@@ -19,6 +21,7 @@ const TouchableOpacityForm = ({
       render={({field: {value}, fieldState}) => (
         <>
           <TouchableOpacity
+            testID={testID}
             style={[styles.input, fieldState.error && styles.errorInput]}
             onPress={onPress}>
             <Text>{value || 'Select status'}</Text>

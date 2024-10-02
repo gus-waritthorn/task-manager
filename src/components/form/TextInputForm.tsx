@@ -4,9 +4,11 @@ import {Controller, Control} from 'react-hook-form';
 import {Task} from '../../utils/task';
 
 const TextInputForm = ({
+  testID,
   name,
   control,
 }: {
+  testID: string;
   name: 'title' | 'description';
   control: Control<Task>;
 }) => {
@@ -17,6 +19,7 @@ const TextInputForm = ({
       render={({field: {onChange, onBlur, value}, fieldState}) => (
         <>
           <TextInput
+            testID={testID}
             style={[styles.input, fieldState.error && styles.errorInput]}
             onBlur={onBlur}
             onChangeText={text => onChange(text)}
